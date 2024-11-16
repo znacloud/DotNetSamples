@@ -1,0 +1,19 @@
+#logo:hover ~ #yellow_circle {
+  transform: scale(100, 100);
+  transition: all 2.5s ease-in;
+  transition-delay: 0.5s;
+}
+#logo ~ #yellow_circle {
+  transition: all 2.5s ease-out;
+  transition-delay: -1.5s;
+}
+
+#logo:hover ~ #orange_circle {
+  transform: scale(100, 100);
+  transition: all 2.5s ease-in;
+}
+
+#logo ~ #orange_circle {
+  transition: all 2.5s ease-out;
+  transition-delay: -1s;
+}

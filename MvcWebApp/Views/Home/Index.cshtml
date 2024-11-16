@@ -1,8 +1,22 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "KoalaCloud - Brighten Your Childhood";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="h-screen w-full flex flex-col items-center overflow-hidden">
+    <img id="logo" src="/KoalaCloud.svg" class=" absolute top-1/2 mt-[-200px] rounded-full z-10" alt="koalacloud"
+        width=250 height=250 />
+
+
+    <div id="orange_circle" class="w-[200px] h-[200px] rounded-full absolute top-1/2 mt-[-175px] bg-primary -z-30">
+    </div>
+    <div id="yellow_circle" class="w-[200px] h-[200px] rounded-full absolute top-1/2 mt-[-175px] bg-secondary -z-20">
+    </div>
+
+    <a class=" absolute top-1/2 mt-32 text-base" asp-controller="Home" asp-action="/login">
+        登录
+    </a>
+
+    <footer class=" absolute bottom-4 text-center text-xs text-gray-500 p-5">
+        ©@($"{DateTime.Now:yyyy}") KoalaCloud
+    </footer>
 </div>

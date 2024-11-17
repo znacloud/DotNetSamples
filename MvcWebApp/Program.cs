@@ -1,4 +1,27 @@
+using Microsoft.EntityFrameworkCore;
+using MvcWebApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// var conStrBuilder = new SqlConnectionStringBuilder(
+//         builder.Configuration.GetConnectionString("MvcWebAppContext") ?? throw new InvalidOperationException("Connection string 'MvcWebAppContext' not found.")
+//         );
+// conStrBuilder["Server"] = builder.Configuration["mysql:server"];
+// conStrBuilder["Port"] = builder.Configuration["mysql:port"];
+// conStrBuilder["Database"] = builder.Configuration["mysql:database"];
+// conStrBuilder["User"] = builder.Configuration["mysql:user"];
+// conStrBuilder["Password"] = builder.Configuration["mysql:password"];
+// var connectionString = conStrBuilder.ConnectionString;
+var server = builder.Configuration["mysql:server"];
+var port = builder.Configuration["mysql:port"];
+var database = builder.Configuration["mysql:database"];
+var user = builder.Configuration["mysql:user"];
+var password = builder.Configuration["mysql:password"];
+var connectionString = $"Server={server};Port={port};Uid={user};Pwd={password};Database={database};";
+
+Console.WriteLine(connectionString);
+
+builder.Services.AddDbContext<MvcWebAppContext>(options => options.UseMySQL(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

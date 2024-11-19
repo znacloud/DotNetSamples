@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+  ViewData["title"] = "Login";
+  ViewData["ReturnUrl"] = Context.Request.Query["ReturnUrl"];
+}
+
+<div class=" relative h-screen min-h-[45rem] w-full overflow-hidden">
+  <img alt="bottom_icon" src="/imgs/icon_bg.svg" width=400 height=400
+    class=" absolute bottom-[-12rem] left-1/2 -translate-x-1/2 -z-10" />
+
+  <img alt="left_icon" src="/imgs/icon_bg.svg" width=200 height=200
+    class=" absolute left-[-5rem] top-[-4rem] rotate-45 -z-10" />
+
+  <img alt="right_icon" src="/imgs/icon_bg.svg" width=200 height=200
+    class=" absolute right-[-6rem] top-[-5rem] -rotate-[30deg] -z-10" />
+
+  <main class=" w-full h-full flex flex-col justify-center items-center p-4">
+    <div class="w-[18rem] shadow-lg bg-primary z-50 text-center py-5 text-xl text-white  rounded-md">
+      @("登录")
+    </div>
+    <div class="w-[20rem] shadow-lg bg-white rounded-xl mt-[-3rem] px-[2rem] pt-[5rem] ">
+      @* @await Component.InvokeAsync("LoginForm") *@
+      <vc:login-form></vc:login-form>
+    </div>
+  </main>
+  <footer class=" absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 p-5">
+    @($"©{DateTime.Now:yyyy} KoalaCloud")
+  </footer>
+</div>

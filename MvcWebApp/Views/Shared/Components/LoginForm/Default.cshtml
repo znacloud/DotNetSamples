@@ -1,0 +1,15 @@
+<form name="normal_login" asp-action="Login" asp-route-ReturnUrl="@ViewData["ReturnUrl"]"
+    class="flex flex-col items-center">
+    @{
+        Console.WriteLine(string.Join(",",ViewData.ToArray()));
+    }
+    <input name="username" type="text" value="" placeholder="账号" class=" w-full border border-gray hover:border-current focus:border-current \
+         outline-current \
+        border-solid rounded p-1 text-sm text-black" />
+    <input name="password" value="" placeholder="密码" type="password" class=" w-full border border-gray hover:border-current focus:border-current \
+        outline-current \
+        border-solid rounded p-1 text-sm text-black mt-6" />
+    @* {state.error && <Alert message={state.error.msg} type="error" />} *@
+
+    <input type="submit" value="确定" class=" text-primary my-6 px-2 py-1 rounded hover:bg-gray-100" />
+</form>

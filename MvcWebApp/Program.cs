@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using MvcWebApp.Data;
 
@@ -19,12 +21,27 @@ var user = builder.Configuration["mysql:user"];
 var password = builder.Configuration["mysql:password"];
 var connectionString = $"Server={server};Port={port};Uid={user};Pwd={password};Database={database};";
 
-Console.WriteLine(connectionString);
-
 builder.Services.AddDbContext<MvcWebAppContext>(options => options.UseMySQL(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add cookie authentication.
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/User/Login";
+        options.SlidingExpiration = true;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    });
+
+// Add authorization.
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 var app = builder.Build();
 
@@ -40,6 +57,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+});
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

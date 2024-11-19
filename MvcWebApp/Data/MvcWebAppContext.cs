@@ -17,6 +17,7 @@ namespace MvcWebApp.Data
         }
 
         public DbSet<MvcWebApp.Models.UserInfoModel> UserInfoModel { get; set; } = default!;
+        public DbSet<MvcWebApp.Models.UserCredentials> UserCredentials { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

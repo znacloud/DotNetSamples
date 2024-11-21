@@ -47,11 +47,11 @@ namespace MvcWebApp.Controllers
                 Console.WriteLine($"Login: {username}, {password}");
                 var userInfo = await VerifyCredential(username, password);
                 var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userInfo.Email),
-                new Claim("NickName", userInfo.NickName),
-                new Claim(ClaimTypes.Role, userInfo.Roles![0]),
-            };
+                {
+                    new Claim(ClaimTypes.Name, userInfo.Email),
+                    new Claim("NickName", userInfo.NickName),
+                    new Claim(ClaimTypes.Role, userInfo.Roles![0]),
+                };
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -65,7 +65,7 @@ namespace MvcWebApp.Controllers
                     });
                 if (returnUrl is null)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "Home");
 
                 }
                 else
@@ -74,11 +74,19 @@ namespace MvcWebApp.Controllers
                     return LocalRedirect(returnUrl);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // Console.WriteLine(e);
-                return Challenge();
+                return View();
             }
+        }
+
+        // POST: User/Logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout(){
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "User");
         }
 
         private async Task<UserInfoModel> VerifyCredential(string email, string password)

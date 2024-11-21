@@ -1,51 +1,108 @@
-﻿<!DOCTYPE html>
+﻿@using MvcWebApp.Data;
+@using Microsoft.EntityFrameworkCore;
+@inject MvcWebAppContext DbContext;
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MvcWebApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="~/MvcWebApp.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MvcWebApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - MvcWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+@functions {
+    private async Task<UserInfoModel> FetchCurrentUser()
+    {
+        string? email = Context.User?.Identity?.Name;
+        var user = await DbContext.UserInfoModel.FirstAsync(u => u.Email.Equals(email));
+        return user;
+    }
+}
+
+@{
+    UserInfoModel currentUser = await FetchCurrentUser();
+    string selectedId = ViewData["MenuKey"] as string ?? "all";
+
+    var menuItems = new[]{
+        new {
+            key = "all",
+            icon = "/imgs/dashboard.svg",
+            title = "概览",
+            url = "/dashboard",
+        },
+
+        new {
+            key = "riddle",
+            icon = "/imgs/robot.svg",
+            title = "考拉儿童谜语",
+            url = "/dashboard/riddle",
+        },
+        new {
+            key = "stats",
+            icon = "/imgs/bar_chart.svg",
+            title = "数据统计",
+            url = "/dashboard/stats",
+        },
+        new {
+            key = "acl",
+            icon = "/imgs/team.svg",
+            title = "权限管理",
+            url = "/dashboard/acl",
+        },
+    };
+}
+
+
+<body id="dashboard" class="h-screen flex flex-row items-stretch">
+    <aside id="MenuPanel" class=" w-52 shadow-md">
+        <header class="w-full h-16 text-[1.4rem] space-x-1  flex justify-center items-center bg-secondary">
+            <img src="/imgs/logo_notext.svg" width="48" height="48" />
+            <label>
+                <span class="text-primary">KOALA</span>
+                <span class=" text-white font-semibold">Cloud</span>
+            </label>
+        </header>
+        <nav class="w-full overflow-y-scroll">
+
+            <menu class="w-full text-sm">
+                @foreach (var item in menuItems)
+                {
+                    var bgStyle = item.key == selectedId ? "bg-secondary/25" : "hover:bg-gray-100";
+                    var txStyle = item.key == selectedId ? "text-primary" : "text-black";
+                    <li id="@item.key" class="px-4 py-2 m-1 rounded-md @bgStyle" onclick="@item.url">
+                        <a href="@item.url" class="flex flex-row space-x-2 ml-4 ">
+                            <img src="@item.icon" width="16" height="16" />
+                            <label class="@txStyle">@item.title</label>
+                        </a>
+                    </li>
+                }
+            </menu>
+
+        </nav>
+    </aside>
+
+    <main class="flex-1 bg-gray-100">
+        <header
+            class="w-full shadow-md h-16 text-md text-white px-4 flex justify-start space-x-4 items-center bg-primary">
+            <img id="MenuIcon" src="/imgs/outdent.svg" width="24" height="24" class=" cursor-pointer" />
+            <label>
+                @menuItems.FirstOrDefault(m => m.key == selectedId)?.title
+            </label>
+            <div class="flex-1"></div>
+            <partial name="_UserProfilePartial" model="@currentUser"></partial>
+        </header>
+        @RenderBody()
+    </main>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

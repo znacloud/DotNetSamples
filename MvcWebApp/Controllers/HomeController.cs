@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MvcWebApp.Models;
 
@@ -13,14 +14,35 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [AllowAnonymous]
     public IActionResult Index()
     {
         return View();
     }
 
-    public IActionResult Privacy()
+
+    [Route("/Dashboard")]
+    public IActionResult Dashboard()
     {
-        return View();
+        return View("Dashboard/Index");
+    }
+
+    [Route("/Dashboard/Riddle")]
+    public IActionResult Riddle()
+    {
+        return View("Dashboard/Riddle");
+    }
+
+      [Route("/Dashboard/Stats")]
+    public IActionResult Statistics()
+    {
+        return View("Dashboard/Stats");
+    }
+
+      [Route("/Dashboard/Acl")]
+    public IActionResult AccessControl()
+    {
+        return View("Dashboard/Acl");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

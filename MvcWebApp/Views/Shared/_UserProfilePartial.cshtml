@@ -1,0 +1,27 @@
+@model UserInfoModel;
+
+<div class="relative inline-block text-left">
+    <div>
+        <button type="button"
+            class="inline-flex w-8 h-8 justify-center items-center  rounded-full bg-secondary text-sm font-semibold text-primary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            id="ProfileIcon" aria-expanded="true" aria-haspopup="true">
+            @(char.ToUpper(Model.Username[0]))
+        </button>
+    </div>
+
+    <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
+        id="ProfilePanel" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+        <div class="py-1" role="none">
+            <!-- Active: "bg-gray-100 text-gray-900 outline-none", Not Active: "text-gray-700" -->
+            <label class="block px-4 text-lg bold text-black">@Model.Username</label>
+            <label class="block px-4 text-sm text-gray-700">@Model.Email</label>
+        </div>
+        <div class="py-1" role="none">
+            <form method="post" asp-action="Logout" asp-controller="User">
+                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-error" role="menuitem" tabindex="-1"
+                    id="logout">退出登录</button>
+            </form>
+            
+        </div>
+    </div>
+</div>

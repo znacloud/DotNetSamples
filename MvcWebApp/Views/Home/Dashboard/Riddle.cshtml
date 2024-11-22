@@ -1,4 +1,60 @@
+@model IEnumerable<MvcWebApp.ViewModels.RiddleCategoryDetail>;
 @{
     ViewData["title"] = "Dashboard";
     ViewData["MenuKey"] = "riddle";
 }
+
+<div class="p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 grid-flow-row  gap-4 justify-stretch">
+    @foreach (var categoryDetail in Model)
+    {
+
+        <div class="relative">
+            <div class=" flex flex-col w-full min-h-[calc(100%-2rem)] bg-white rounded-lg shadow-md pt-10 pb-4 px-4 mt-8">
+                <h3 class=" text-lg font-bold">@categoryDetail.Category.Name</h3>
+                <div class="flex items-baseline space-x-1 text-xs">
+                    <label>@("描述：")</label>
+                    <label>@(categoryDetail.Category.Description ?? "无")</label>
+                </div>
+                <div class="flex items-baseline justify-between mt-2">
+                    <h5 class="font-bold">@($"共{categoryDetail.RiddleCount}条")</h5>
+                    @* <button type="text" class=" text-primary font-extralight cursor-pointer" 
+                        // onClick={createRiddleFn}
+                        >
+                        icon={<PlusOutlined />}
+                        @("添加谜语")
+                        </button> *@
+                    @* <span style={{ display: "flex" , flex: 1 }} /> *@
+
+                    @if (categoryDetail.Category.TotalNum > 3)
+                    {
+                        <button type="text" class=" text-primary font-extralight cursor-pointer">
+                            @("查看更多>>")
+                        </button>
+                    }
+                    @* <Modal title="添加谜语" centered // visible={showCreate} footer={null} destroyOnClose={true} onCancel={()=>
+                            {
+                            // setShowCreate(false);
+                            }}
+                            >
+                            <AddRiddleView cateId={category.id} />
+                        </Modal> *@
+                </div>
+                <div class="flex flex-col space-y-1 mt-2">
+                    @foreach (var riddle in categoryDetail.PreviewRiddles)
+                    {
+                        var content = $"{riddle.SerialNum}. {riddle.Mystery} \n({riddle.Tips}) \n-- {riddle.Answer}";
+                        <span title="@content"
+                            class="text-sm w-full max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+                            @content
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <div
+                class="absolute top-0 left-6 w-16 h-16 rounded-md bg-primary shadow-md flex justify-center items-center text-white text-2xl">
+                @categoryDetail.Category.Name[0]
+            </div>
+        </div>
+    }
+</div>

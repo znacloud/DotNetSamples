@@ -95,7 +95,10 @@
             <div class="flex-1"></div>
             <partial name="_UserProfilePartial" model="@currentUser"></partial>
         </header>
-        @RenderBody()
+        <div class="block max-h-[calc(100%-4rem)] overflow-auto">
+               @RenderBody()
+        </div>
+     
     </main>
 
 

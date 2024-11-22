@@ -18,7 +18,13 @@ namespace MvcWebApp.Data
 
         public DbSet<MvcWebApp.Models.UserInfoModel> UserInfoModel { get; set; } = default!;
         public DbSet<MvcWebApp.Models.UserCredentials> UserCredentials { get; set; } = default!;
+        public DbSet<MvcWebApp.Models.RiddleCategory> RiddleCategories { get; set; } = default!;
+        public DbSet<MvcWebApp.Models.Riddle> Riddles { get; set; } = default!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableDetailedErrors();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserInfoModel>()

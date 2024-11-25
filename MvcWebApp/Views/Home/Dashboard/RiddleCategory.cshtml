@@ -1,0 +1,37 @@
+@model IEnumerable<Riddle>;
+@{
+    ViewData["title"] = "Dashboard";
+    ViewData["MenuKey"] = "riddle";
+
+    string categoryId = Model.First().CategoryId;
+    int firstSerialNum = Model.First().SerialNum;
+    int lastSerialNum = Model.Last().SerialNum;
+}
+
+<div class="p-4 w-full">
+    <ul class=" bg-white rounded-lg shadow-lg">
+        @foreach (var riddle in Model)
+        {
+            var content = $"{riddle.SerialNum}. {riddle.Mystery} \n({riddle.Tips}) \n-- {riddle.Answer}";
+            <li title="@content" class="text-sm w-full max-w-full even:bg-current/10 p-2">
+                @content
+            </li>
+        }
+    </ul>
+    <div class="mt-4 w-fit box-border rounded-lg bg-white shadow-lg divide-x-2 ml-auto">
+        <a class="px-2 py-1 inline-block" 
+            asp-action="RiddleCategory" 
+            asp-controller="Home"
+            asp-route-CategoryId="@categoryId" 
+            asp-route-FirstSerialNum="@(firstSerialNum)">
+                @("上一页")
+        </a>
+        <a class="px-2 py-1 inline-block" 
+            asp-action="RiddleCategory" 
+            asp-controller="Home"
+            asp-route-CategoryId="@categoryId" 
+            asp-route-LastSerialNum="@lastSerialNum">
+                @("下一页")
+        </a>
+    </div>
+</div>

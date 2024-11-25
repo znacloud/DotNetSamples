@@ -27,9 +27,11 @@
 
                     @if (categoryDetail.Category.TotalNum > 3)
                     {
-                        <button type="text" class=" text-primary font-extralight cursor-pointer">
+                        <a asp-action="RiddleCategory" asp-controller="Home" 
+                            asp-route-CategoryId="@categoryDetail.Category.Id" 
+                            class=" text-primary font-extralight cursor-pointer">
                             @("查看更多>>")
-                        </button>
+                        </a>
                     }
                     @* <Modal title="添加谜语" centered // visible={showCreate} footer={null} destroyOnClose={true} onCancel={()=>
                             {

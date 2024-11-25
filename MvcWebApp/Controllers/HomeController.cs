@@ -58,6 +58,28 @@ public class HomeController : Controller
         return View("Dashboard/Riddle", riddleCategories);
     }
 
+    [Route("/Dashboard/RiddleList")]
+    public async Task<IActionResult> RiddleCategory(string categoryId, int FirstSerialNum=0, int LastSerialNum=0) {
+        List<Riddle>? riddles = null;
+        if(FirstSerialNum > 1){
+            riddles = await _context.Riddles
+                .OrderByDescending(r => r.SerialNum)
+                .Where(r => r.CategoryId == categoryId && r.SerialNum < FirstSerialNum )
+                .Take(20)
+                .ToListAsync();
+        }else{
+            riddles = await _context.Riddles
+                .OrderBy(r => r.SerialNum)
+                .Where(r => r.CategoryId == categoryId && r.SerialNum > LastSerialNum )
+                .Take(20)
+                .ToListAsync();
+        }
+
+
+        return View("Dashboard/RiddleCategory", riddles?.OrderBy(r=>r.SerialNum));
+    }
+    
+
     [Route("/Dashboard/Stats")]
     public IActionResult Statistics()
     {

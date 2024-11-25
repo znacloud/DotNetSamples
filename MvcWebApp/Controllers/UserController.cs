@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using MvcWebApp.ViewModels;
 
 namespace MvcWebApp.Controllers
 {
@@ -33,6 +34,7 @@ namespace MvcWebApp.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
+            ModelState.ClearValidationState("LoginError");
             return View();
         }
 
@@ -40,12 +42,17 @@ namespace MvcWebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string username, string password, string? returnUrl = null)
+        public async Task<IActionResult> Login([Bind("Username, Password")] LoginCredential credential, string? returnUrl = null)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(credential);
+            }
+
             try
             {
-                Console.WriteLine($"Login: {username}, {password}");
-                var userInfo = await VerifyCredential(username, password);
+                Console.WriteLine($"Login: {credential.Username}, {credential.Password}");
+                var userInfo = await VerifyCredential(credential.Username, credential.Password);
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, userInfo.Email),
@@ -77,6 +84,7 @@ namespace MvcWebApp.Controllers
             catch (Exception)
             {
                 // Console.WriteLine(e);
+                ModelState.AddModelError(string.Empty, "登录失败，请重试");
                 return View();
             }
         }

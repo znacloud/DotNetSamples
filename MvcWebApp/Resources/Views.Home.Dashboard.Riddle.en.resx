@@ -133,4 +133,8 @@
     <value>More &gt;&gt;</value>
     <comment> </comment>
   </data>
+  <data name="&lt; 返回" xml:space="preserve">
+    <value>&lt; Back</value>
+    <comment> </comment>
+  </data>
 </root>

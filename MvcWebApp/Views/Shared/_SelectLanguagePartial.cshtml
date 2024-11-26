@@ -13,7 +13,6 @@
         .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
         .ToList();
     var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value + Context.Request.QueryString}";
-    Console.WriteLine($"returnUrl={returnUrl}");
 }
 
 <div>

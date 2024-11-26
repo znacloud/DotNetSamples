@@ -1,19 +1,29 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
-@model IEnumerable<Riddle>;
+@model RiddleCategoryDetail;
 @{
     ViewData["title"] = "Dashboard";
     ViewData["MenuKey"] = "riddle";
 
-    string categoryId = Model.First().CategoryId;
-    int firstSerialNum = Model.First().SerialNum;
-    int lastSerialNum = Model.Last().SerialNum;
+    string categoryId = Model.Category.Id;
+    int firstSerialNum = Model.PreviewRiddles.First().SerialNum;
+    int lastSerialNum = Model.PreviewRiddles.Last().SerialNum;
 }
 
 <div class="p-4 w-full">
+    <div class="flex justify-center items-center mb-4 w-fit">
+        <a class="px-2 hover:text-gray-500" 
+            href="/dashboard/riddle">
+                @Localizer["< 返回"]
+        </a>
+        <span class=" self-stretch w-[1px] bg-gray-500"></span>
+        <label class="px-2">
+                @Model.Category.Name
+        </a>
+    </div>
     <ul class=" bg-white rounded-lg shadow-lg">
-        @foreach (var riddle in Model)
+        @foreach (var riddle in Model.PreviewRiddles)
         {
             var content = $"{riddle.SerialNum}. {riddle.Mystery} \n({riddle.Tips}) \n-- {riddle.Answer}";
             <li title="@content" class="text-sm w-full max-w-full even:bg-current/10 p-2">

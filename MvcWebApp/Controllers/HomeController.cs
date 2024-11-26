@@ -62,26 +62,42 @@ public class HomeController : Controller
     [Route("/Dashboard/RiddleList")]
     public async Task<IActionResult> RiddleCategory(string categoryId, int FirstSerialNum = 0, int LastSerialNum = 0)
     {
+
+
         List<Riddle>? riddles = null;
         if (FirstSerialNum > 1)
         {
-            riddles = await _context.Riddles
+            riddles = _context.Riddles
                 .OrderByDescending(r => r.SerialNum)
                 .Where(r => r.CategoryId == categoryId && r.SerialNum < FirstSerialNum)
                 .Take(20)
-                .ToListAsync();
+                .ToList();
         }
         else
         {
-            riddles = await _context.Riddles
+            riddles = _context.Riddles
                 .OrderBy(r => r.SerialNum)
                 .Where(r => r.CategoryId == categoryId && r.SerialNum > LastSerialNum)
                 .Take(20)
-                .ToListAsync();
+                .ToList();
         }
 
+        riddles = riddles?.OrderBy(r => r.SerialNum).ToList();
 
-        return View("Dashboard/RiddleCategory", riddles?.OrderBy(r => r.SerialNum));
+        var categoryInfo = await _context.RiddleCategories
+            .Where(category => category.Id == categoryId)
+            .Select(category => new
+            {
+                Category = category,
+                TotalCount = _context.Riddles.Count(r => r.CategoryId == category.Id),
+
+            })
+            .ToListAsync();
+
+        var categoryDetails = new RiddleCategoryDetail(categoryInfo[0].Category, categoryInfo[0].TotalCount, riddles ?? []);
+
+
+        return View("Dashboard/RiddleCategory", categoryDetails);
     }
 
 

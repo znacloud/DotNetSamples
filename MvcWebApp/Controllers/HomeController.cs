@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcWebApp.Data;
@@ -59,26 +60,30 @@ public class HomeController : Controller
     }
 
     [Route("/Dashboard/RiddleList")]
-    public async Task<IActionResult> RiddleCategory(string categoryId, int FirstSerialNum=0, int LastSerialNum=0) {
+    public async Task<IActionResult> RiddleCategory(string categoryId, int FirstSerialNum = 0, int LastSerialNum = 0)
+    {
         List<Riddle>? riddles = null;
-        if(FirstSerialNum > 1){
+        if (FirstSerialNum > 1)
+        {
             riddles = await _context.Riddles
                 .OrderByDescending(r => r.SerialNum)
-                .Where(r => r.CategoryId == categoryId && r.SerialNum < FirstSerialNum )
+                .Where(r => r.CategoryId == categoryId && r.SerialNum < FirstSerialNum)
                 .Take(20)
                 .ToListAsync();
-        }else{
+        }
+        else
+        {
             riddles = await _context.Riddles
                 .OrderBy(r => r.SerialNum)
-                .Where(r => r.CategoryId == categoryId && r.SerialNum > LastSerialNum )
+                .Where(r => r.CategoryId == categoryId && r.SerialNum > LastSerialNum)
                 .Take(20)
                 .ToListAsync();
         }
 
 
-        return View("Dashboard/RiddleCategory", riddles?.OrderBy(r=>r.SerialNum));
+        return View("Dashboard/RiddleCategory", riddles?.OrderBy(r => r.SerialNum));
     }
-    
+
 
     [Route("/Dashboard/Stats")]
     public IActionResult Statistics()
@@ -96,5 +101,18 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public IActionResult SetLanguage(string culture, string returnUrl)
+    {
+        Response.Cookies.Append(
+            CookieRequestCultureProvider.DefaultCookieName,
+            CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+            new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+        );
+
+        return LocalRedirect(returnUrl);
     }
 }

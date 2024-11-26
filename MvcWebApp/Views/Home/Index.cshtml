@@ -1,4 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
     ViewData["Title"] = "KoalaCloud - Brighten Your Childhood";
 }
 
@@ -13,10 +17,11 @@
     </div>
 
     <a class=" absolute top-1/2 mt-32 text-base text-black" asp-controller="User" asp-action="Login">
-        登录
+        @Localizer["login"]
     </a>
 
-    <footer class=" absolute bottom-4 text-center text-xs text-gray-500 p-5">
-        ©@($"{DateTime.Now:yyyy}") KoalaCloud
+    <footer class=" flex items-center space-x-8  absolute bottom-4 text-center text-xs text-gray-500 p-5">
+        <span>©@($"{DateTime.Now:yyyy}") KoalaCloud</span>
+        <partial name="_SelectLanguagePartial"></partial>
     </footer>
 </div>

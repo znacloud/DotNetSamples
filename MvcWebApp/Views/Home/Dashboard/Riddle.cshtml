@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model IEnumerable<MvcWebApp.ViewModels.RiddleCategoryDetail>;
 @{
     ViewData["title"] = "Dashboard";
@@ -12,11 +15,16 @@
             <div class=" flex flex-col w-full min-h-[calc(100%-2rem)] bg-white rounded-lg shadow-md pt-10 pb-4 px-4 mt-8">
                 <h3 class=" text-lg font-bold">@categoryDetail.Category.Name</h3>
                 <div class="flex items-baseline space-x-1 text-xs">
-                    <label>@("描述：")</label>
-                    <label>@(categoryDetail.Category.Description ?? "无")</label>
+                    <label>@Localizer["描述："]</label>
+                    @if(categoryDetail.Category.Description is null){
+                        <label>@Localizer["无"]</label>
+                    }else{
+                        <label>@(categoryDetail.Category.Description)</label>
+                    }
+                    
                 </div>
                 <div class="flex items-baseline justify-between mt-2">
-                    <h5 class="font-bold">@($"共{categoryDetail.RiddleCount}条")</h5>
+                    <h5 class="font-bold">@Localizer["共{0}条",categoryDetail.RiddleCount]</h5>
                     @* <button type="text" class=" text-primary font-extralight cursor-pointer" 
                         // onClick={createRiddleFn}
                         >
@@ -30,7 +38,7 @@
                         <a asp-action="RiddleCategory" asp-controller="Home" 
                             asp-route-CategoryId="@categoryDetail.Category.Id" 
                             class=" text-primary font-extralight cursor-pointer">
-                            @("查看更多>>")
+                            @Localizer["查看更多>>"]
                         </a>
                     }
                     @* <Modal title="添加谜语" centered // visible={showCreate} footer={null} destroyOnClose={true} onCancel={()=>

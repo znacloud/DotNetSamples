@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @model IEnumerable<Riddle>;
 @{
     ViewData["title"] = "Dashboard";
@@ -18,20 +21,21 @@
             </li>
         }
     </ul>
-    <div class="mt-4 w-fit box-border rounded-lg bg-white shadow-lg divide-x-2 ml-auto">
-        <a class="px-2 py-1 inline-block" 
+    <div class="flex justify-center items-center mt-4 w-fit rounded-lg text-sm shadow-lg bg-white  ml-auto">
+        <a class="px-2 py-1 inline-block min-w-24 text-center  hover:bg-gray-100" 
             asp-action="RiddleCategory" 
             asp-controller="Home"
             asp-route-CategoryId="@categoryId" 
             asp-route-FirstSerialNum="@(firstSerialNum)">
-                @("上一页")
+                @Localizer["上一页"]
         </a>
-        <a class="px-2 py-1 inline-block" 
+        <span class=" self-stretch w-[1px] bg-gray-200"></span>
+        <a class="px-2 py-1 inline-block min-w-24 text-center hover:bg-gray-100" 
             asp-action="RiddleCategory" 
             asp-controller="Home"
             asp-route-CategoryId="@categoryId" 
             asp-route-LastSerialNum="@lastSerialNum">
-                @("下一页")
+                @Localizer["下一页"]
         </a>
     </div>
 </div>

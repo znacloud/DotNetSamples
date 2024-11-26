@@ -1,6 +1,10 @@
 ﻿@using MvcWebApp.Data;
 @using Microsoft.EntityFrameworkCore;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
 @inject MvcWebAppContext DbContext;
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,26 +35,26 @@
         new {
             key = "all",
             icon = "/imgs/dashboard.svg",
-            title = "概览",
+            title = Localizer["概览"],
             url = "/dashboard",
         },
 
         new {
             key = "riddle",
             icon = "/imgs/robot.svg",
-            title = "考拉儿童谜语",
+            title = Localizer["考拉儿童谜语"],
             url = "/dashboard/riddle",
         },
         new {
             key = "stats",
             icon = "/imgs/bar_chart.svg",
-            title = "数据统计",
+            title = Localizer["数据统计"],
             url = "/dashboard/stats",
         },
         new {
             key = "acl",
             icon = "/imgs/team.svg",
-            title = "权限管理",
+            title = Localizer["权限管理"],
             url = "/dashboard/acl",
         },
     };
@@ -58,7 +62,7 @@
 
 
 <body id="dashboard" class="h-screen flex flex-row items-stretch">
-    <aside id="MenuPanel" class=" w-52 shadow-md">
+    <aside id="MenuPanel" class="flex flex-col w-52 h-full shadow-md">
         <header class="w-full h-16 text-[1.4rem] space-x-1  flex justify-center items-center bg-secondary">
             <img src="/imgs/logo_notext.svg" width="48" height="48" />
             <label>
@@ -66,8 +70,7 @@
                 <span class=" text-white font-semibold">Cloud</span>
             </label>
         </header>
-        <nav class="w-full overflow-y-scroll">
-
+        <nav class="w-full overflow-y-scroll flex-1">
             <menu class="w-full text-sm">
                 @foreach (var item in menuItems)
                 {
@@ -81,8 +84,11 @@
                     </li>
                 }
             </menu>
-
         </nav>
+        <div class="w-full h-[1px] bg-gray-300"></div>
+        <footer class="flex justify-center p-2 text-sm">
+                <partial name="_SelectLanguagePartial"></partial>
+        </footer>
     </aside>
 
     <main class="flex-1 bg-gray-100">
@@ -93,6 +99,7 @@
                 @menuItems.FirstOrDefault(m => m.key == selectedId)?.title
             </label>
             <div class="flex-1"></div>
+            
             <partial name="_UserProfilePartial" model="@currentUser"></partial>
         </header>
         <div class="block max-h-[calc(100%-4rem)] overflow-auto">

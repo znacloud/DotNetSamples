@@ -12,16 +12,19 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using MvcWebApp.ViewModels;
+using Microsoft.Extensions.Localization;
 
 namespace MvcWebApp.Controllers
 {
     public class UserController : Controller
     {
         private readonly MvcWebAppContext _context;
+        private readonly IStringLocalizer<UserController> _localizer;
 
-        public UserController(MvcWebAppContext context)
+        public UserController(MvcWebAppContext context, IStringLocalizer<UserController> localizer)
         {
             _context = context;
+            _localizer = localizer;
         }
 
         // GET: User
@@ -84,7 +87,7 @@ namespace MvcWebApp.Controllers
             catch (Exception)
             {
                 // Console.WriteLine(e);
-                ModelState.AddModelError(string.Empty, "登录失败，请重试");
+                ModelState.AddModelError(string.Empty, _localizer["login_error"]);
                 return View();
             }
         }

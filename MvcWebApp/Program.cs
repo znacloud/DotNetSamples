@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using MvcWebApp.Data;
 
@@ -22,6 +23,20 @@ var password = builder.Configuration["mysql:password"];
 var connectionString = $"Server={server};Port={port};Uid={user};Pwd={password};Database={database};";
 
 builder.Services.AddDbContext<MvcWebAppContext>(options => options.UseMySQL(connectionString));
+
+// Localisation
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddMvc()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { "zh", "en" };
+    options.SetDefaultCulture(supportedCultures[0])
+        .AddSupportedCultures(supportedCultures)
+        .AddSupportedUICultures(supportedCultures);
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -61,6 +76,8 @@ app.UseCookiePolicy(new CookiePolicyOptions
 {
     MinimumSameSitePolicy = SameSiteMode.Strict,
 });
+app.UseRequestLocalization();
+
 app.UseAuthentication();
 app.UseAuthorization();
 

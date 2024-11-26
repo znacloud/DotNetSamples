@@ -6,9 +6,9 @@ namespace MvcWebApp.ViewModels;
 public class LoginCredential
 {
 
-    [Required(ErrorMessage = "请填写账号")]
+    [Required(ErrorMessage = "account_required")]
     public required string Username { get; set; }
 
-    [Required(ErrorMessage = "请填写密码")]
+    [Required(ErrorMessage = "password_required")]
     public required string Password { get; set; }
 }

@@ -1,17 +1,19 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model LoginCredential
 
 <form name="normal_login" asp-action="Login" asp-route-ReturnUrl="@ViewData["ReturnUrl"]"
     class="flex flex-col items-center">
 
     <div asp-validation-summary="ModelOnly" class="text-error text-sm p-2 rounded bg-error/30 mb-4"></div>
-    <input asp-for="Username" type="text" placeholder="账号" class=" w-full border border-gray hover:border-current focus:border-current \
+    <input asp-for="Username" type="text" placeholder="@Localizer["account"]" class=" w-full border border-gray hover:border-current focus:border-current \
          outline-current \
         border-solid rounded p-1 text-sm text-black" />
     <span asp-validation-for="Username" class="w-fit text-error text-sm mr-auto"></span>
-    <input asp-for="Password" placeholder="密码" type="password" class=" w-full border border-gray hover:border-current focus:border-current \
+    <input asp-for="Password" placeholder="@Localizer["password"]" type="password" class=" w-full border border-gray hover:border-current focus:border-current \
         outline-current \
         border-solid rounded p-1 text-sm text-black mt-6" />
     <span asp-validation-for="Password" class="w-fit text-error text-sm mr-auto"></span>
 
-    <input type="submit" value="确定" class=" text-primary my-6 px-2 py-1 rounded hover:bg-gray-100" />
+    <input type="submit" value="@Localizer["ok"]" class=" text-primary my-6 px-2 py-1 rounded hover:bg-gray-100" />
 </form>
